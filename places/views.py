@@ -1,33 +1,38 @@
 from django.shortcuts import render
+from places.models import Place
 
 
 # Create your views here.
 def index(request):
-    places = {
-        "type": "FeatureCollection",
-        "features": [
-            {
-                "type": "Feature",
-                "geometry": {"type": "Point", "coordinates": [37.62, 55.793676]},
-                "properties": {
-                    "title": "«Легенды Москвы",
-                    "placeId": "moscow_legends",
-                    "detailsUrl": "static/places/moscow_legends.json",
-                },
-            },
+    places = Place.objects.all()
+
+    features = []
+
+    details_urls = {
+        "Экскурсионный проект «Крыши24.рф»": "static/places/roofs24.json",
+        "Экскурсионная компания «Легенды Москвы»": "static/places/moscow_legends.json",
+    }
+
+    
+    for place in places:
+        features.append(
             {
                 "type": "Feature",
                 "geometry": {
                     "type": "Point",
-                    "coordinates": [37.64, 55.753676],
+                    "coordinates": [place.lng, place.lat],
                 },
                 "properties": {
-                    "title": "Крыши24.рф",
-                    "placeId": "roofs24",
-                    "detailsUrl": "static/places/roofs24.json",
+                    "title": place.title,
+                    "placeId": place.pk,
+                    "detailsUrl": details_urls[place.title],
                 },
-            },
-        ],
+            }
+        )
+
+    geojson = {
+        "type": "FeatureCollection",
+        "features": features,
     }
 
-    return render(request, "index.html", {"places_geojson": places})
+    return render(request, "index.html", {"places_geojson": geojson})
