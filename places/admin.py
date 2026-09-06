@@ -1,9 +1,10 @@
+from adminsortable2.admin import SortableAdminBase, SortableInlineAdminMixin
 from django.contrib import admin
 from django.utils.html import format_html
 from places.models import Place, PlaceImage
 
 
-class PlaceImageInline(admin.TabularInline):
+class PlaceImageInline(SortableInlineAdminMixin, admin.TabularInline):
     model = PlaceImage
     extra = 1
     readonly_fields = ['image_preview']
@@ -20,14 +21,13 @@ class PlaceImageInline(admin.TabularInline):
 
 
 @admin.register(Place)
-class PlaceAdmin(admin.ModelAdmin):
+class PlaceAdmin(SortableAdminBase, admin.ModelAdmin):
     inlines = [PlaceImageInline]
 
 
 @admin.register(PlaceImage)
-class PlaceImageAdmin(admin.ModelAdmin):
+class PlaceImageAdmin(SortableAdminBase, admin.ModelAdmin):
     list_display = ['place', 'ordering', 'image']
-    list_editable = ['ordering']
     readonly_fields = ['image_preview']
 
     @admin.display(description='Превью')
