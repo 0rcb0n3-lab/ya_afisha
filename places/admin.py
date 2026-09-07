@@ -16,10 +16,10 @@ class PlaceImageInline(SortableInlineAdminMixin, admin.TabularInline):
     def image_preview(self, obj):
         if obj.image:
             return format_html(
-                "<img src='{}' style='max-height: 200px; width: auto;' />,",
+                "<img src='{}' style='max-height: 200px; width: auto;' />",
                 obj.image.url,
             )
-        return 'Нет изображения'
+        return 'No image'
 
 
 class PlaceAdminForm(forms.ModelForm):
@@ -40,11 +40,11 @@ class PlaceImageAdmin(SortableAdminBase, admin.ModelAdmin):
     list_display = ['place', 'ordering', 'image']
     readonly_fields = ['image_preview']
 
-    @admin.display(description='Превью')
+    @admin.display(description='get preview')
     def image_preview(self, obj):
         if obj.image:
             return format_html(
                 '<img src="{}" style="max-height: 200px; width: auto;" />',
                 obj.image.url,
             )
-        return 'Нет изображения'
+        return 'No image'

@@ -1,28 +1,61 @@
 from django.db import models
+from django.urls import reverse
 
 
 class Place(models.Model):
-    title = models.CharField(max_length=200)
-    description_short = models.TextField()
-    description_long = models.TextField()
-    lng = models.FloatField()
-    lat = models.FloatField()
+    title = models.CharField('Title', max_length=200)
+    description_short = models.TextField('Short description', blank=True)
+    description_long = models.TextField('Full description', blank=True)
+    lng = models.FloatField('Longitude')
+    lat = models.FloatField('Latitude')
+
+    class Meta:
+        verbose_name = 'Place'
+        verbose_name_plural = 'Places'
 
     def __str__(self) -> str:
         return self.title
+
+    def as_feature(self) -> dict:
+        return {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [self.lng, self.lat],
+            },
+            "properties": {
+                "title": self.title,
+                "placeId": self.pk,
+                "detailsUrl": reverse("place_detail", kwargs={"pk": self.pk}),
+            },
+        }
+
+    def as_json(self) -> dict:
+        return {
+            "title": self.title,
+            "imgs": [img.image.url for img in self.images.all()],
+            "description_short": self.description_short,
+            "description_long": self.description_long,
+            "coordinates": {
+                "lat": self.lat,
+                "lng": self.lng,
+            },
+        }
 
 
 class PlaceImage(models.Model):
     place = models.ForeignKey(
         Place,
         on_delete=models.CASCADE,
-        related_name="images",
+        related_name='images',
     )
-    image = models.ImageField(upload_to="places_images")
-    ordering = models.PositiveIntegerField(default=0)
+    image = models.ImageField('Picture', upload_to='places_images')
+    ordering = models.PositiveIntegerField('Order', default=0)
 
     class Meta:
-        ordering = ["ordering"]
+        ordering = ['ordering']
+        verbose_name = 'Place image'
+        verbose_name_plural = 'Places images'
 
     def __str__(self) -> str:
-        return f"{self.place.title} - картинка {self.ordering}"
+        return f'{self.place.title} - image {self.ordering}'
