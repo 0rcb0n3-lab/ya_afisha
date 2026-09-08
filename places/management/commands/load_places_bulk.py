@@ -26,6 +26,6 @@ class Command(BaseCommand):
             if entry['type'] == 'file' and entry['name'].endswith('.json')
         ]
         for json_url in json_urls:
-            data = requests.get(json_url, timeout=30).json()
-            place = load_place(data)
+            place_data = requests.get(json_url, timeout=30).json()
+            place = load_place(place_data)
             self.stdout.write(self.style.SUCCESS(f'  {place.title}'))

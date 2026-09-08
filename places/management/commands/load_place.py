@@ -13,6 +13,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         for json_url in options['json_urls']:
-            data = requests.get(json_url, timeout=30).json()
-            place = load_place(data)
+            place_data = requests.get(json_url, timeout=30).json()
+            place = load_place(place_data)
             self.stdout.write(self.style.SUCCESS(f'  {place.title}'))
