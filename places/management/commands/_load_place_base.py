@@ -5,7 +5,7 @@ from django.core.files.base import ContentFile
 from places.models import Place, PlaceImage
 
 
-def load_place_from_dict(data):
+def load_place(data):
     place, _ = Place.objects.update_or_create(
         title=data['title'],
         defaults={

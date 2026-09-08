@@ -2,7 +2,7 @@ import requests
 
 from django.core.management.base import BaseCommand
 
-from ._load_place_base import load_place_from_dict
+from ._load_place_base import load_place
 
 PLACES_DIRECTORY_URL = 'https://api.github.com/repos/devmanorg/where-to-go-places/contents/places'
 
@@ -27,5 +27,5 @@ class Command(BaseCommand):
         ]
         for json_url in json_urls:
             data = requests.get(json_url, timeout=30).json()
-            place = load_place_from_dict(data)
+            place = load_place(data)
             self.stdout.write(self.style.SUCCESS(f'  {place.title}'))
