@@ -19,8 +19,11 @@ def load_place(data):
     place.images.all().delete()
     for ordering, img_url in enumerate(data['imgs']):
         image_data = download_image(img_url)
-        image = PlaceImage(place=place, ordering=ordering)
-        image.image.save(basename(img_url), ContentFile(image_data), save=True)
+        PlaceImage.objects.create(
+            place=place,
+            ordering=ordering,
+            image=ContentFile(image_data, name=basename(img_url)),
+        )
     return place
 
 
