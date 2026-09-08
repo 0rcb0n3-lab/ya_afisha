@@ -34,7 +34,7 @@ class PlaceAdminForm(forms.ModelForm):
     class Meta:
         model = Place
         fields = "__all__"
-        widgets = {"description_long": TinyMCE()}
+        widgets = {"long_description": TinyMCE()}
 
 
 @admin.register(Place)

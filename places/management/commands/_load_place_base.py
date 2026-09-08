@@ -20,8 +20,8 @@ def load_place(data):
     place, _ = Place.objects.update_or_create(
         title=data['title'],
         defaults={
-            'description_short': data['description_short'],
-            'description_long': data['description_long'],
+            'short_description': data['description_short'],
+            'long_description': data['description_long'],
             'lng': float(data['coordinates']['lng']),
             'lat': float(data['coordinates']['lat']),
         },

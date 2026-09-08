@@ -4,8 +4,8 @@ from django.urls import reverse
 
 class Place(models.Model):
     title = models.CharField('Title', max_length=200)
-    description_short = models.TextField('Short description', blank=True)
-    description_long = models.TextField('Full description', blank=True)
+    short_description = models.TextField('Short description', blank=True)
+    long_description = models.TextField('Full description', blank=True)
     lng = models.FloatField('Longitude')
     lat = models.FloatField('Latitude')
 
@@ -34,8 +34,8 @@ class Place(models.Model):
         return {
             "title": self.title,
             "imgs": [img.image.url for img in self.images.all()],
-            "description_short": self.description_short,
-            "description_long": self.description_long,
+            "description_short": self.short_description,
+            "description_long": self.long_description,
             "coordinates": {
                 "lat": self.lat,
                 "lng": self.lng,
