@@ -1,10 +1,11 @@
+from environs import Env
 import requests
 
 from django.core.management.base import BaseCommand
 
 from ._load_place_base import load_place
 
-PLACES_DIRECTORY_URL = 'https://api.github.com/repos/devmanorg/where-to-go-places/contents/places'
+PLACES_DIRECTORY_URL = Env().str('PLACES_DIRECTORY_URL')
 
 
 class Command(BaseCommand):
