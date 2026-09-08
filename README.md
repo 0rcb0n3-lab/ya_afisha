@@ -35,12 +35,19 @@ pip install -r requirements.txt
 
 ### 4. Настройка переменных окружения
 
-Создайте файл `.env` в папке `where_to_go/` рядом с `settings.py`:
+Скопируйте шаблон в корень проекта:
+
+```bash
+cp .env.example .env
+```
+
+Или создайте файл `.env` в корне проекта (рядом с `manage.py`):
 
 ```env
 SECRET_KEY=your-secret-key
 DEBUG=True
 ALLOWED_HOSTS=127.0.0.1,localhost
+PLACES_DIRECTORY_URL=https://api.github.com/repos/devmanorg/where-to-go-places/contents/places
 ```
 
 ### 5. Применение миграций
@@ -95,15 +102,13 @@ python manage.py load_place "URL_1" "URL_2"
 python manage.py load_places_bulk
 ```
 
-Адрес укажите в переменной `PLACES_DIRECTORY_URL`:
+Адрес репозитория с JSON-файлами задаётся переменной `PLACES_DIRECTORY_URL` в файле `.env`:
 
-`places/management/commands/load_places_bulk.py`
-
-```python
-PLACES_DIRECTORY_URL = 'https://api.github.com/repos/devmanorg/where-to-go-places/contents/places'
+```env
+PLACES_DIRECTORY_URL=https://api.github.com/repos/devmanorg/where-to-go-places/contents/places
 ```
 
-Если источник данных изменится, достаточно заменить значение `PLACES_DIRECTORY_URL` на новый адрес репозитория с JSON-файлами.
+Если источник данных изменится, достаточно заменить значение `PLACES_DIRECTORY_URL` в `.env` и повторить запуск.
 
 При повторном запуске уже загруженные места не создаются повторно.
 
