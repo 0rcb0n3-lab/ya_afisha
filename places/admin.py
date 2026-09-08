@@ -8,12 +8,7 @@ from tinymce.widgets import TinyMCE
 from places.models import Place, PlaceImage
 
 
-class PlaceImageInline(SortableInlineAdminMixin, admin.TabularInline):
-    model = PlaceImage
-    extra = 1
-    readonly_fields = ['image_preview']
-    fields = ['image', 'image_preview', 'ordering']
-
+class ImagePreviewAdminMixin:
     @admin.display(description='get preview')
     def image_preview(self, obj):
         if obj.image:
@@ -22,6 +17,17 @@ class PlaceImageInline(SortableInlineAdminMixin, admin.TabularInline):
                 obj.image.url,
             )
         return 'No image'
+
+
+class PlaceImageInline(
+    ImagePreviewAdminMixin,
+    SortableInlineAdminMixin,
+    admin.TabularInline,
+):
+    model = PlaceImage
+    extra = 1
+    readonly_fields = ['image_preview']
+    fields = ['image', 'image_preview', 'ordering']
 
 
 class PlaceAdminForm(forms.ModelForm):
@@ -38,15 +44,10 @@ class PlaceAdmin(SortableAdminBase, admin.ModelAdmin):
 
 
 @admin.register(PlaceImage)
-class PlaceImageAdmin(SortableAdminBase, admin.ModelAdmin):
+class PlaceImageAdmin(
+    ImagePreviewAdminMixin,
+    SortableAdminBase,
+    admin.ModelAdmin,
+):
     list_display = ['place', 'ordering', 'image']
     readonly_fields = ['image_preview']
-
-    @admin.display(description='get preview')
-    def image_preview(self, obj):
-        if obj.image:
-            return format_html(
-                '<img src="{}" style="max-height: 200px; width: auto;" />',
-                obj.image.url,
-            )
-        return 'No image'
