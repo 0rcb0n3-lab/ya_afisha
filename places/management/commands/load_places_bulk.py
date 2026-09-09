@@ -1,13 +1,10 @@
 import sys
 
-from environs import Env
 import requests
-
+from django.conf import settings
 from django.core.management.base import BaseCommand
 
 from ._load_place_base import get_error_message, load_place
-
-PLACES_DIRECTORY_URL = Env().str('PLACES_DIRECTORY_URL')
 
 
 class Command(BaseCommand):
@@ -16,7 +13,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument(
             '--directory',
-            default=PLACES_DIRECTORY_URL,
+            default=settings.PLACES_DIRECTORY_URL,
             help='GitHub API URL of the directory with JSON files',
         )
 

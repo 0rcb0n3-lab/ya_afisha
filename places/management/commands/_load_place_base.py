@@ -33,7 +33,7 @@ def load_place(data):
         PlaceImage.objects.create(
             place=place,
             ordering=ordering,
-            image=ContentFile(image_data, name=basename(img_url)),
+            image=ContentFile(image_data, name=extract_filename(img_url)),
         )
     return place
 
@@ -47,5 +47,5 @@ def download_image(url):
     return response.content
 
 
-def basename(url):
+def extract_filename(url):
     return url.rsplit('/', 1)[-1]
